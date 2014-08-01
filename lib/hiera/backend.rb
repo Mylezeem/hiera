@@ -163,6 +163,23 @@ class Hiera
         end
       end
 
+      # Tests answer type to provide proper resolution_type
+      # only if resolution_type is set to default (ie. :priority)
+      #
+      # @param answer [Hash|Array|String] The answer to the lookup
+      # @param resolution_type [String] The current resolution type
+      # @return [String] The resolution_type to adopt.
+      def find_resolution_type(answer, resolution_type)
+        if answer.is_a?(Array) and resolution_type == :priority
+          new_resolution_type = :array
+        elsif answer.is_a?(Hash) and resolution_type == :priority
+          new_resolution_type = :hash
+        else
+          new_resolution_type = resolution_type
+        end
+        return new_resolution_type
+      end
+
       # Merges two hashes answers with the configured merge behavior.
       #         :merge_behavior: {:native|:deep|:deeper}
       #

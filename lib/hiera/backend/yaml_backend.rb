@@ -33,7 +33,8 @@ class Hiera
           #
           # for priority searches we break after the first found data item
           new_answer = Backend.parse_answer(data[key], scope)
-          case resolution_type
+          new_resolution_type = Backend.find_resolution_type(new_answer, resolution_type)
+          case new_resolution_type
           when :array
             raise Exception, "Hiera type mismatch: expected Array and got #{new_answer.class}" unless new_answer.kind_of? Array or new_answer.kind_of? String
             answer ||= []
